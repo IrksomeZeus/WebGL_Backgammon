@@ -12,6 +12,10 @@ var angles  = [];
 var c = [];
 var s = [];
 
+var boardWidth = 32;
+var boardHeight = 26;
+var boardDepth = 4;
+
 var cubeSize = 10;
 var cubeSize2 = cubeSize / 2.0;
 var windowMin = -cubeSize2;
@@ -36,17 +40,20 @@ window.onload = function init()
 	// Load vertices and colors for cube faces
 
 	vertices = [
-	   vec4(0.0, 0.0, cubeSize, 1.0),
-	   vec4(0.0, cubeSize, cubeSize, 1.0),
-	   vec4(cubeSize, cubeSize, cubeSize, 1.0),
-	   vec4(cubeSize, 0.0, cubeSize, 1.0),
-	   vec4(0.0, 0.0, 0.0, 1.0),
-	   vec4(0.0, cubeSize, 0.0, 1.0),
-	   vec4(cubeSize, cubeSize, 0.0, 1.0),
-	   vec4(cubeSize, 0.0, 0.0, 1.0)
+
+    vec4(0.0, 0.0, 0.0, 1.0),
+    vec4(boardWidth, 0.0, 0.0, 1.0),
+    vec4(boardWidth, boardDepth, 0.0, 1.0),
+    vec4(0.0, boardDepth, 0.0, 1.0),
+
+    vec4(0.0, 0.0, boardHeight, 1.0),
+    vec4(boardWidth, 0.0, boardHeight, 1.0),
+    vec4(boardWidth, boardDepth, boardHeight, 1.0),
+    vec4(0.0, boardDepth, boardHeight, 1.0),
+
 	];
 	 colors = [
-	    vec4(1.0, 0.0, 0.0, 1.0),  // red
+	  vec4(1.0, 0.0, 0.0, 1.0),  // red
 		vec4(1.0, 1.0, 0.0, 1.0),  // yellow
 		vec4(0.0, 1.0, 0.0, 1.0),  // green
 		vec4(0.0, 0.0, 1.0, 1.0),  // blue
@@ -57,6 +64,11 @@ window.onload = function init()
 	// Load indices to represent the triangles that will draw each face
 
 	indices = [
+    1, 3, 2, 2, 4, 3,  // Front Face
+    2, 7, 6, 2, 3, 7,  // Right face
+    1, 5, 6, 6, 1, 2,  // Bottom face
+    
+
 	   1, 0, 3, 3, 2, 1,  // front face
 	   2, 3, 7, 7, 6, 2,  // right face
 	   3, 0, 4, 4, 7, 3,  // bottom face
