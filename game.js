@@ -1,45 +1,53 @@
-function WhitePiece() {
-  this.radius = 1.625/2;
-}
+class WhitePiece {
+  constructor() {
+    this.radius = 1.625/2;
+  }
+};
 
-function BlackPiece() {
-  this.radius = 1.625/2;
-}
+class BlackPiece {
+  constructor() {
+    this.radius = 1.625/2;
+  }
+};
 
-function Board() {
-  var white = WhitePiece();
-  var black = BlackPiece();
+class Board {
+  constructor() {
+    var white = new WhitePiece();
+    var black = new BlackPiece();
 
-  this.gameState =
-  [
-    [white, white],
-    [],
-    [],
-    [],
-    [],
-    [black, black, black, black, black],
-    [],
-    [black, black, black],
-    [],
-    [],
-    [],
-    [white, white, white, white, white],
-    [black, black, black, black, black],
-    [],
-    [],
-    [],
-    [white, white, white],
-    [],
-    [white, white, white, white, white],
-    [],
-    [],
-    [],
-    [],
-    [black, black]
-  ];
+    this.gameState =
+    [
+      [white, white],
+      [],
+      [],
+      [],
+      [],
+      [black, black, black, black, black],
+      [],
+      [black, black, black],
+      [],
+      [],
+      [],
+      [white, white, white, white, white],
+      [black, black, black, black, black],
+      [],
+      [],
+      [],
+      [white, white, white],
+      [],
+      [white, white, white, white, white],
+      [],
+      [],
+      [],
+      [],
+      [black, black]
+    ];
 
-  this.playerOnePoints = 0;
-  this.playerTwoPoints = 0;
-  this.jailed = [];
-  this.playerOneTurn = true;
-}
+    this.playerOnePoints = 0;
+    this.playerTwoPoints = 0;
+    this.jailed = [];
+    this.playerOneTurn = true;
+  }
+
+  
+};
