@@ -67,7 +67,7 @@ window.onload = function init()
     1, 3, 2, 2, 4, 3,  // Front Face
     2, 7, 6, 2, 3, 7,  // Right face
     1, 5, 6, 6, 1, 2,  // Bottom face
-    
+
 
 	   1, 0, 3, 3, 2, 1,  // front face
 	   2, 3, 7, 7, 6, 2,  // right face
