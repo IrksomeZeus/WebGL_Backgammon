@@ -217,14 +217,29 @@ window.onload = function init()
 	//projection = ortho (windowMin, windowMax, windowMin, windowMax, windowMin, windowMax+cubeSize);
 	// Register event listeners for the buttons
 
-	var a=document.getElementById ("XButton");
-	a.addEventListener ("click", function() { axis = xAxis; });
-	var b=document.getElementById ("YButton");
-	b.addEventListener ("click", function () { axis = yAxis; });
-	var c=document.getElementById ("ZButton");
-	c.addEventListener ("click", function () { axis = zAxis; });
-	var d=document.getElementById ("Reset");
-	d.addEventListener ("click", function () { theta = [0.0, 0.0, 0.0]; axis = xAxis });
+  var die1 = document.getElementById("Die1");
+  var die2 = document.getElementById("Die2");
+  var rollButton = document.getElementById("Roll");
+  rollButton.addEventListener("click", function() {
+
+    var val1 = Math.ceil(6 * Math.random());
+    var val2 = Math.ceil(6 * Math.random());
+
+    console.log(val1, val2);
+
+    die1.textContent = parseInt(val1);
+    die2.textContent = parseInt(val2);
+
+  })
+
+	// var a=document.getElementById ("XButton");
+	// a.addEventListener ("click", function() { axis = xAxis; });
+	// var b=document.getElementById ("YButton");
+	// b.addEventListener ("click", function () { axis = yAxis; });
+	// var c=document.getElementById ("ZButton");
+	// c.addEventListener ("click", function () { axis = zAxis; });
+	// var d=document.getElementById ("Reset");
+	// d.addEventListener ("click", function () { theta = [0.0, 0.0, 0.0]; axis = xAxis });
 
     //  Load shaders and initialize attribute buffers
 
@@ -288,7 +303,6 @@ function render()
 
 	looking = lookAt (vec3(cubeSize2,cubeSize2,4*cubeSize), vec3(cubeSize2,cubeSize2,0), vec3(0.0, 1.0, 0.0));
 	projection = perspective (45.0, aspect, 1, 10*cubeSize);
-	// rotation = mult (rz, mult(ry, rx));
 	modelView = mult(looking, mult(tz2 ,mult(rx, tz1)));
 	gl.uniformMatrix4fv (modelViewLoc, false, flatten(modelView));
 	gl.uniformMatrix4fv (projectionLoc, false, flatten(projection));
@@ -313,7 +327,5 @@ function render()
   for (var i = 48; i < 60; i++) {
     gl.drawElements( gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3*i );
   }
-
-
 	requestAnimFrame (render);
 };
