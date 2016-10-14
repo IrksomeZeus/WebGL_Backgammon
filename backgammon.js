@@ -7,6 +7,8 @@ var projectionLoc;
 var vertices = [];
 var colors = [];
 var indices = [];
+var blackTriangles = [];
+var whiteTriangles = [];
 var theta = [];
 var angles  = [];
 var c = [];
@@ -29,6 +31,8 @@ var axis = 0;
 var projection;
 var modelView;
 var aspect;
+
+var iBuffer;
 
 window.onload = function init()
 {
@@ -86,12 +90,11 @@ window.onload = function init()
   console.log(vertices.length);
 
 	 colors = [
-	  vec4(1.0, 0.0, 0.0, 1.0),  // red
-		vec4(1.0, 1.0, 0.0, 1.0),  // yellow
-		vec4(0.0, 1.0, 0.0, 1.0),  // green
-		vec4(0.0, 0.0, 1.0, 1.0),  // blue
-		vec4(1.0, 0.0, 1.0, 1.0),  // magenta
-		vec4(0.0, 1.0, 1.0, 1.0)   // cyan
+     vec4(178/255, 178/255, 178/255, 1.0),
+     vec4(128/255, 128/255, 128/255, 1.0),
+     vec4(0, 0, 0, 1),
+     vec4(1, 1, 1, 1),
+     vec4(80/255, 80/255, 80/255, 1)
 	];
 
   for (i=0; i < 255; i = i + 5) {
@@ -168,8 +171,7 @@ window.onload = function init()
     16, 11, 19,
     19, 24, 16,
 
-    // Black Triangles
-
+    // Black triangles
     47, 48, 49,
     43, 44, 45,
     39, 40, 41,
@@ -183,7 +185,7 @@ window.onload = function init()
     72, 74, 73,
     76, 78, 77,
 
-    // White triangles
+    // White Triangles
 
     49, 50, 51,
     45, 46, 47,
@@ -197,7 +199,6 @@ window.onload = function init()
     66, 68, 67,
     70, 72, 71,
     74, 76, 75
-
   ];
 
   console.log(indices.length);
@@ -211,7 +212,7 @@ window.onload = function init()
     //
     gl.viewport( 0, 0, canvas.width, canvas.height);
 	aspect = canvas.width / canvas.height;
-    gl.clearColor( 0.7, 0.7, 0.7, 1.0 );
+    gl.clearColor( 0.4, 0.4, 0.4, 1.0 );
 	gl.enable(gl.DEPTH_TEST);
 	//projection = ortho (windowMin, windowMax, windowMin, windowMax, windowMin, windowMax+cubeSize);
 	// Register event listeners for the buttons
@@ -242,7 +243,7 @@ window.onload = function init()
     gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vPosition );
 
-	var iBuffer = gl.createBuffer();
+	iBuffer = gl.createBuffer();
 	gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, iBuffer);
 	gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW);
 
@@ -268,41 +269,51 @@ function render()
 		s[i] = Math.sin(angles[i]);
 	};
 
+  t = 60;
 	rx = mat4 (1.0, 0.0, 0.0, 0.0,
-	           0.0, c[0], -s[0], 0.0,
-			   0.0, s[0], c[0], 0.0,
+	           0.0, Math.cos(radians(t)), -Math.sin(radians(t)), 0.0,
+			   0.0, Math.sin(radians(t)), Math.cos(radians(t)), 0.0,
 			   0.0, 0.0, 0.0, 1.0);
 
-	ry = mat4 (c[1], 0.0, s[1], 0.0,
-			   0.0, 1.0, 0.0, 0.0,
-			   -s[1], 0.0, c[1], 0.0,
+	tz1 = mat4 (1.0, 0.0, 0.0, -16,
+			   0.0, 1.0, 0.0, -1.5,
+			   0.0, 0.0, 1.0, -13,
 			   0.0, 0.0, 0.0, 1.0);
 
-	rz = mat4 (c[2], -s[2], 0.0, 0.0,
-			   s[2], c[2], 0.0, 0.0,
-			   0.0, 0.0, 1.0, 0.0,
-			   0.0, 0.0, 0.0, 1.0);
-
-	tz1 = mat4 (1.0, 0.0, 0.0, -cubeSize2,
-			   0.0, 1.0, 0.0, -cubeSize2,
-			   0.0, 0.0, 1.0, -cubeSize2,
-			   0.0, 0.0, 0.0, 1.0);
-
-	tz2 = mat4 (1.0, 0.0, 0.0, cubeSize2,
-			   0.0, 1.0, 0.0, cubeSize2,
-			   0.0, 0.0, 1.0, cubeSize2,
+	tz2 = mat4 (1.0, 0.0, 0.0, 5,
+			   0.0, 1.0, 0.0, -13,
+			   0.0, 0.0, 1.0, 6,
 			   0.0, 0.0, 0.0, 1.0);
 
 
 	looking = lookAt (vec3(cubeSize2,cubeSize2,4*cubeSize), vec3(cubeSize2,cubeSize2,0), vec3(0.0, 1.0, 0.0));
 	projection = perspective (45.0, aspect, 1, 10*cubeSize);
-	rotation = mult (rz, mult(ry, rx));
-	modelView = mult(looking, mult(tz2, mult (rotation, tz1)));
+	// rotation = mult (rz, mult(ry, rx));
+	modelView = mult(looking, mult(tz2 ,mult(rx, tz1)));
 	gl.uniformMatrix4fv (modelViewLoc, false, flatten(modelView));
 	gl.uniformMatrix4fv (projectionLoc, false, flatten(projection));
-	for (var i=0; i<100; i++) {
-		gl.uniform4fv (colorLoc, colors[i % 6]);
+
+  gl.uniform4fv(colorLoc, colors[4]);
+  for (var i=0; i<10; i++) {
+    gl.drawElements( gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3*i );
+  }
+  gl.uniform4fv(colorLoc, colors[0]);
+  for (var i=10; i<12; i++) {
+    gl.drawElements( gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3*i );
+  }
+  gl.uniform4fv(colorLoc, colors[1]);
+  for (var i=12; i<36; i++) {
 		gl.drawElements( gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3*i );
 	}
+  gl.uniform4fv(colorLoc, colors[2]);
+  for (var i = 36; i < 48; i++) {
+    gl.drawElements( gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3*i );
+  }
+  gl.uniform4fv(colorLoc, colors[3]);
+  for (var i = 48; i < 60; i++) {
+    gl.drawElements( gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3*i );
+  }
+
+
 	requestAnimFrame (render);
 };
