@@ -47,7 +47,5 @@ class Board {
     this.playerTwoPoints = 0;
     this.jailed = [];
     this.playerOneTurn = true;
-  }
-
-  
+  }  
 };
