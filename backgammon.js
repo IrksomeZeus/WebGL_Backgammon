@@ -29,6 +29,7 @@ var axis = 0;
 var projection;
 var modelView;
 var aspect;
+var game;
 
 var iBuffer;
 
@@ -47,7 +48,7 @@ window.onload = function init() {
   gl.clearColor(0.4, 0.4, 0.4, 1.0);
   gl.enable(gl.DEPTH_TEST);
 
-  var game = new Board();
+  game = new Board();
   var pieces = game.getPieces();
   currVertices = currIndices.concat(vertices);
   currVertices = currVertices.concat(pieces[0]);
@@ -56,13 +57,13 @@ window.onload = function init() {
   currIndices = currIndices.concat(pieces[2]);
   currIndices = currIndices.concat(pieces[3]);
 
-  console.log(currVertices.length);
-
-  console.log(currIndices.length);
-
-  console.log(pieces[0].length);
-
-  console.log(pieces[2].length);
+  // console.log(currVertices.length);
+  //
+  // console.log(currIndices.length);
+  //
+  // console.log(pieces[0].length);
+  //
+  // console.log(pieces[2].length);
 
   var die1 = document.getElementById("Die1");
   var die2 = document.getElementById("Die2");
@@ -72,7 +73,7 @@ window.onload = function init() {
     var val1 = Math.ceil(6 * Math.random());
     var val2 = Math.ceil(6 * Math.random());
 
-    console.log(val1, val2);
+    // console.log(val1, val2);
 
     die1.textContent = parseInt(val1);
     die2.textContent = parseInt(val2);
@@ -97,6 +98,47 @@ window.onload = function init() {
   iBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBuffer);
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(currIndices), gl.STATIC_DRAW);
+
+  var one = document.getElementById("1");
+  one.addEventListener("click", function() {
+    if (game.number != -1) {
+      var state = game.gameState[0];
+      if (state.length != 0) {
+        state.shift();
+        if (game.playerOneTurn) {
+          game.gameState[game.number].push(new WhitePiece());
+        } else {
+          game.gamesState[game.number].push(new BlackPiece());
+
+        }
+      }
+    }
+  });
+  var two = document.getElementById("2");
+  var three = document.getElementById("3");
+  var four = document.getElementById("4");
+  var five = document.getElementById("5");
+  var six = document.getElementById("6");
+  var seven = document.getElementById("7");
+  var eight = document.getElementById("8");
+  var nine = document.getElementById("9");
+  var ten = document.getElementById("10");
+  var eleven = document.getElementById("11");
+  var twelve = document.getElementById("12");
+  var thirteen = document.getElementById("13");
+  var fourteen = document.getElementById("14");
+  var fifteen = document.getElementById("15");
+  var sixteen = document.getElementById("16");
+  var seventeen = document.getElementById("17");
+  var eighteen = document.getElementById("18");
+  var nineteen = document.getElementById("19");
+  var twenty = document.getElementById("20");
+  var twentyone = document.getElementById("21");
+  var twentytwo = document.getElementById("22");
+  var twentythree = document.getElementById("23");
+  var twentyfour = document.getElementById("24");
+
+
 
   render();
 };
@@ -128,6 +170,16 @@ function render() {
   gl.uniformMatrix4fv(modelViewLoc, false, flatten(modelView));
   gl.uniformMatrix4fv(projectionLoc, false, flatten(projection));
 
+  var pieces = game.getPieces();
+  currVertices = [];
+  currVertices = currIndices.concat(vertices);
+  currVertices = currVertices.concat(pieces[0]);
+  currVertices = currVertices.concat(pieces[1]);
+  currIndices = [];
+  currIndices = currIndices.concat(indices);
+  currIndices = currIndices.concat(pieces[2]);
+  currIndices = currIndices.concat(pieces[3]);
+
   gl.uniform4fv(colorLoc, colors[4]);
   for (var i = 0; i < 10; i++) {
     gl.drawElements(gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3 * i);
@@ -149,11 +201,11 @@ function render() {
     gl.drawElements(gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3 * i);
   }
   gl.uniform4fv(colorLoc, colors[5]);
-  for (var i = 60; i < 90; i++) {
+  for (var i = 60; i < 60 + (game.whiteNum * 2); i++) {
     gl.drawElements(gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3 * i);
   }
   gl.uniform4fv(colorLoc, colors[6]);
-  for (var i = 90; i < 300; i++) {
+  for (var i = 60 + (game.whiteNum * 2); i < 60 + (game.whiteNum * 2) + (game.blackNum * 2); i++) {
     gl.drawElements(gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3 * i);
   }
   requestAnimFrame(render);

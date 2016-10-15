@@ -47,6 +47,9 @@ class Board {
     this.playerTwoPoints = 0;
     this.jailed = [];
     this.playerOneTurn = true;
+    this.whiteNum = 15;
+    this.blackNum = 15;
+    this.number = 2;
   }
 
   getPieces() {
