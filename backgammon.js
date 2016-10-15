@@ -4,9 +4,10 @@ var colorLoc;
 var modelViewLoc;
 var projectionLoc;
 
-var vertices = [];
-var colors = [];
-var indices = [];
+var currVertices = [];
+
+var currIndices = [];
+
 var blackTriangles = [];
 var whiteTriangles = [];
 var angles = [];
@@ -38,10 +39,6 @@ window.onload = function init() {
   if (!gl) {
     alert("WebGL isn't available");
   }
-
-  console.log(vertices.length);
-
-  console.log(indices.length);
   //
   //  Configure WebGL
   //
@@ -49,6 +46,23 @@ window.onload = function init() {
   aspect = canvas.width / canvas.height;
   gl.clearColor(0.4, 0.4, 0.4, 1.0);
   gl.enable(gl.DEPTH_TEST);
+
+  var game = new Board();
+  var pieces = game.getPieces();
+  currVertices = currIndices.concat(vertices);
+  currVertices = currVertices.concat(pieces[0]);
+  currVertices = currVertices.concat(pieces[1]);
+  currIndices = currIndices.concat(indices);
+  currIndices = currIndices.concat(pieces[2]);
+  currIndices = currIndices.concat(pieces[3]);
+
+  console.log(currVertices.length);
+
+  console.log(currIndices.length);
+
+  console.log(pieces[0].length);
+
+  console.log(pieces[2].length);
 
   var die1 = document.getElementById("Die1");
   var die2 = document.getElementById("Die2");
@@ -74,7 +88,7 @@ window.onload = function init() {
 
   var vBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, flatten(vertices), gl.STATIC_DRAW);
+  gl.bufferData(gl.ARRAY_BUFFER, flatten(currVertices), gl.STATIC_DRAW);
 
   var vPosition = gl.getAttribLocation(program, "vPosition");
   gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
@@ -82,7 +96,7 @@ window.onload = function init() {
 
   iBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBuffer);
-  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(currIndices), gl.STATIC_DRAW);
 
   render();
 };
@@ -90,7 +104,7 @@ window.onload = function init() {
 function render() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  t = 60;
+  t = 75;
   rx = mat4(1.0, 0.0, 0.0, 0.0,
     0.0, Math.cos(radians(t)), -Math.sin(radians(t)), 0.0,
     0.0, Math.sin(radians(t)), Math.cos(radians(t)), 0.0,
@@ -102,8 +116,8 @@ function render() {
     0.0, 0.0, 0.0, 1.0);
 
   tz2 = mat4(1.0, 0.0, 0.0, 5,
-    0.0, 1.0, 0.0, -13,
-    0.0, 0.0, 1.0, 6,
+    0.0, 1.0, 0.0, -18,
+    0.0, 0.0, 1.0, 0,
     0.0, 0.0, 0.0, 1.0);
 
 
@@ -132,6 +146,14 @@ function render() {
   }
   gl.uniform4fv(colorLoc, colors[3]);
   for (var i = 48; i < 60; i++) {
+    gl.drawElements(gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3 * i);
+  }
+  gl.uniform4fv(colorLoc, colors[5]);
+  for (var i = 60; i < 90; i++) {
+    gl.drawElements(gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3 * i);
+  }
+  gl.uniform4fv(colorLoc, colors[6]);
+  for (var i = 90; i < 300; i++) {
     gl.drawElements(gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3 * i);
   }
   requestAnimFrame(render);
