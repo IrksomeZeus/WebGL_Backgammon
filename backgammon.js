@@ -9,7 +9,7 @@ var colors = [];
 var indices = [];
 var blackTriangles = [];
 var whiteTriangles = [];
-var angles  = [];
+var angles = [];
 
 var boardWidth = 32;
 var boardHeight = 26;
@@ -31,42 +31,43 @@ var aspect;
 
 var iBuffer;
 
-window.onload = function init()
-{
-    canvas = document.getElementById( "gl-canvas" );
+window.onload = function init() {
+  canvas = document.getElementById("gl-canvas");
 
-    gl = WebGLUtils.setupWebGL( canvas );
-    if ( !gl ) { alert( "WebGL isn't available" ); }
+  gl = WebGLUtils.setupWebGL(canvas);
+  if (!gl) {
+    alert("WebGL isn't available");
+  }
 
-	// Load vertices and colors for cube faces
+  // Load vertices and colors for cube faces
 
-	vertices = [
-    vec4(0,0,0,1),
-    vec4(0,0,0,1),
-    vec4(32,0,0,1),
-    vec4(32,3,0,1),
-    vec4(0,3,0,1),
-    vec4(0,0,-26,1),
-    vec4(32,0,-26,1),
-    vec4(32,3,-26,1),
-    vec4(0,3,-26,1),
-    vec4(1,3,-25,1),
-    vec4(1,3,-1,1),
-    vec4(15,3,-1,1),
-    vec4(17,3,-1,1),
-    vec4(31,3,-1,1),
-    vec4(31,3,-25,1),
-    vec4(17,3,-25,1),
-    vec4(15,3,-25,1),
-    vec4(1,0,-25,1),
-    vec4(1,0,-1,1),
-    vec4(15,0,-1,1),
-    vec4(17,0,-1,1),
-    vec4(31,0,-1,1),
-    vec4(31,0,-25,1),
-    vec4(17,0,-25,1),
-    vec4(15,0,-25,1),
-	];
+  vertices = [
+    vec4(0, 0, 0, 1),
+    vec4(0, 0, 0, 1),
+    vec4(32, 0, 0, 1),
+    vec4(32, 3, 0, 1),
+    vec4(0, 3, 0, 1),
+    vec4(0, 0, -26, 1),
+    vec4(32, 0, -26, 1),
+    vec4(32, 3, -26, 1),
+    vec4(0, 3, -26, 1),
+    vec4(1, 3, -25, 1),
+    vec4(1, 3, -1, 1),
+    vec4(15, 3, -1, 1),
+    vec4(17, 3, -1, 1),
+    vec4(31, 3, -1, 1),
+    vec4(31, 3, -25, 1),
+    vec4(17, 3, -25, 1),
+    vec4(15, 3, -25, 1),
+    vec4(1, 0, -25, 1),
+    vec4(1, 0, -1, 1),
+    vec4(15, 0, -1, 1),
+    vec4(17, 0, -1, 1),
+    vec4(31, 0, -1, 1),
+    vec4(31, 0, -25, 1),
+    vec4(17, 0, -25, 1),
+    vec4(15, 0, -25, 1),
+  ];
 
   for (i = 3; i < 30; i++) {
     if (i % 2 === 1) {
@@ -86,20 +87,20 @@ window.onload = function init()
 
   console.log(vertices.length);
 
-	 colors = [
-     vec4(178/255, 178/255, 178/255, 1.0),
-     vec4(128/255, 128/255, 128/255, 1.0),
-     vec4(0, 0, 0, 1),
-     vec4(1, 1, 1, 1),
-     vec4(80/255, 80/255, 80/255, 1)
-	];
+  colors = [
+    vec4(178 / 255, 178 / 255, 178 / 255, 1.0),
+    vec4(128 / 255, 128 / 255, 128 / 255, 1.0),
+    vec4(0, 0, 0, 1),
+    vec4(1, 1, 1, 1),
+    vec4(80 / 255, 80 / 255, 80 / 255, 1)
+  ];
 
-  for (i=0; i < 255; i = i + 5) {
-    var factor = i/255;
+  for (i = 0; i < 255; i = i + 5) {
+    var factor = i / 255;
     colors.push(vec4(0, factor, 1, 1));
   }
 
-	// Load indices to represent the triangles that will draw each face
+  // Load indices to represent the triangles that will draw each face
 
   indices = [
 
@@ -199,15 +200,15 @@ window.onload = function init()
   ];
 
   console.log(indices.length);
-    //
-    //  Configure WebGL
-    //
-    gl.viewport( 0, 0, canvas.width, canvas.height);
-	aspect = canvas.width / canvas.height;
-    gl.clearColor( 0.4, 0.4, 0.4, 1.0 );
-	gl.enable(gl.DEPTH_TEST);
-	//projection = ortho (windowMin, windowMax, windowMin, windowMax, windowMin, windowMax+cubeSize);
-	// Register event listeners for the buttons
+  //
+  //  Configure WebGL
+  //
+  gl.viewport(0, 0, canvas.width, canvas.height);
+  aspect = canvas.width / canvas.height;
+  gl.clearColor(0.4, 0.4, 0.4, 1.0);
+  gl.enable(gl.DEPTH_TEST);
+  //projection = ortho (windowMin, windowMax, windowMin, windowMax, windowMin, windowMax+cubeSize);
+  // Register event listeners for the buttons
 
   var die1 = document.getElementById("Die1");
   var die2 = document.getElementById("Die2");
@@ -224,85 +225,85 @@ window.onload = function init()
 
   })
 
-	// var a=document.getElementById ("XButton");
-	// a.addEventListener ("click", function() { axis = xAxis; });
-	// var b=document.getElementById ("YButton");
-	// b.addEventListener ("click", function () { axis = yAxis; });
-	// var c=document.getElementById ("ZButton");
-	// c.addEventListener ("click", function () { axis = zAxis; });
-	// var d=document.getElementById ("Reset");
-	// d.addEventListener ("click", function () { theta = [0.0, 0.0, 0.0]; axis = xAxis });
+  // var a=document.getElementById ("XButton");
+  // a.addEventListener ("click", function() { axis = xAxis; });
+  // var b=document.getElementById ("YButton");
+  // b.addEventListener ("click", function () { axis = yAxis; });
+  // var c=document.getElementById ("ZButton");
+  // c.addEventListener ("click", function () { axis = zAxis; });
+  // var d=document.getElementById ("Reset");
+  // d.addEventListener ("click", function () { theta = [0.0, 0.0, 0.0]; axis = xAxis });
 
-    //  Load shaders and initialize attribute buffers
+  //  Load shaders and initialize attribute buffers
 
-    var program = initShaders( gl, "vertex-shader", "fragment-shader" );
-    gl.useProgram( program );
+  var program = initShaders(gl, "vertex-shader", "fragment-shader");
+  gl.useProgram(program);
 
-	colorLoc = gl.getUniformLocation (program, "color");
-	modelViewLoc = gl.getUniformLocation (program, "modelView");
-	projectionLoc  = gl.getUniformLocation (program, "projection");
+  colorLoc = gl.getUniformLocation(program, "color");
+  modelViewLoc = gl.getUniformLocation(program, "modelView");
+  projectionLoc = gl.getUniformLocation(program, "projection");
 
-    var vBuffer = gl.createBuffer();
-    gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer);
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(vertices), gl.STATIC_DRAW);
+  var vBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, flatten(vertices), gl.STATIC_DRAW);
 
-    var vPosition = gl.getAttribLocation( program, "vPosition" );
-    gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
-    gl.enableVertexAttribArray( vPosition );
+  var vPosition = gl.getAttribLocation(program, "vPosition");
+  gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(vPosition);
 
-	iBuffer = gl.createBuffer();
-	gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, iBuffer);
-	gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW);
+  iBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBuffer);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW);
 
-    render();
+  render();
 };
 
-function render()
-{
-  gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+function render() {
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   t = 60;
-	rx = mat4 (1.0, 0.0, 0.0, 0.0,
-	           0.0, Math.cos(radians(t)), -Math.sin(radians(t)), 0.0,
-			   0.0, Math.sin(radians(t)), Math.cos(radians(t)), 0.0,
-			   0.0, 0.0, 0.0, 1.0);
+  rx = mat4(1.0, 0.0, 0.0, 0.0,
+    0.0, Math.cos(radians(t)), -Math.sin(radians(t)), 0.0,
+    0.0, Math.sin(radians(t)), Math.cos(radians(t)), 0.0,
+    0.0, 0.0, 0.0, 1.0);
 
-	tz1 = mat4 (1.0, 0.0, 0.0, -16,
-			   0.0, 1.0, 0.0, -1.5,
-			   0.0, 0.0, 1.0, -13,
-			   0.0, 0.0, 0.0, 1.0);
+  tz1 = mat4(1.0, 0.0, 0.0, -16,
+    0.0, 1.0, 0.0, -1.5,
+    0.0, 0.0, 1.0, -13,
+    0.0, 0.0, 0.0, 1.0);
 
-	tz2 = mat4 (1.0, 0.0, 0.0, 5,
-			   0.0, 1.0, 0.0, -13,
-			   0.0, 0.0, 1.0, 6,
-			   0.0, 0.0, 0.0, 1.0);
+  tz2 = mat4(1.0, 0.0, 0.0, 5,
+    0.0, 1.0, 0.0, -13,
+    0.0, 0.0, 1.0, 6,
+    0.0, 0.0, 0.0, 1.0);
 
 
-	looking = lookAt (vec3(cubeSize2,cubeSize2,4*cubeSize), vec3(cubeSize2,cubeSize2,0), vec3(0.0, 1.0, 0.0));
-	projection = perspective (45.0, aspect, 1, 10*cubeSize);
-	modelView = mult(looking, mult(tz2 ,mult(rx, tz1)));
-	gl.uniformMatrix4fv (modelViewLoc, false, flatten(modelView));
-	gl.uniformMatrix4fv (projectionLoc, false, flatten(projection));
+  looking = lookAt(vec3(cubeSize2, cubeSize2, 4 * cubeSize), vec3(cubeSize2,
+    cubeSize2, 0), vec3(0.0, 1.0, 0.0));
+  projection = perspective(45.0, aspect, 1, 10 * cubeSize);
+  modelView = mult(looking, mult(tz2, mult(rx, tz1)));
+  gl.uniformMatrix4fv(modelViewLoc, false, flatten(modelView));
+  gl.uniformMatrix4fv(projectionLoc, false, flatten(projection));
 
   gl.uniform4fv(colorLoc, colors[4]);
-  for (var i=0; i<10; i++) {
-    gl.drawElements( gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3*i );
+  for (var i = 0; i < 10; i++) {
+    gl.drawElements(gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3 * i);
   }
   gl.uniform4fv(colorLoc, colors[0]);
-  for (var i=10; i<12; i++) {
-    gl.drawElements( gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3*i );
+  for (var i = 10; i < 12; i++) {
+    gl.drawElements(gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3 * i);
   }
   gl.uniform4fv(colorLoc, colors[1]);
-  for (var i=12; i<36; i++) {
-		gl.drawElements( gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3*i );
-	}
+  for (var i = 12; i < 36; i++) {
+    gl.drawElements(gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3 * i);
+  }
   gl.uniform4fv(colorLoc, colors[2]);
   for (var i = 36; i < 48; i++) {
-    gl.drawElements( gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3*i );
+    gl.drawElements(gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3 * i);
   }
   gl.uniform4fv(colorLoc, colors[3]);
   for (var i = 48; i < 60; i++) {
-    gl.drawElements( gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3*i );
+    gl.drawElements(gl.TRIANGLES, 3, gl.UNSIGNED_BYTE, 3 * i);
   }
-	requestAnimFrame (render);
+  requestAnimFrame(render);
 };
