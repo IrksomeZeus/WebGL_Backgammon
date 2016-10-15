@@ -9,10 +9,7 @@ var colors = [];
 var indices = [];
 var blackTriangles = [];
 var whiteTriangles = [];
-var theta = [];
 var angles  = [];
-var c = [];
-var s = [];
 
 var boardWidth = 32;
 var boardHeight = 26;
@@ -202,11 +199,6 @@ window.onload = function init()
   ];
 
   console.log(indices.length);
-
-	theta[0] = 0.0;
-	theta[1] = 0.0;
-	theta[2] = 0.0;
-
     //
     //  Configure WebGL
     //
@@ -267,22 +259,7 @@ window.onload = function init()
 
 function render()
 {
-    gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-	theta[axis] += 0.5;
-
-	for (i=0; i<3; i++) {
-		angles[i] = radians(theta[i]);
-    if (i === 1 || i === 3){
-      angles[i] = radians(0);
-
-    } else {
-      angles[i] = radians(30);
-    }
-    // c[i] = 0;
-    // s[i] = 0;
-		c[i] = Math.cos(angles[i]);
-		s[i] = Math.sin(angles[i]);
-	};
+  gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   t = 60;
 	rx = mat4 (1.0, 0.0, 0.0, 0.0,
