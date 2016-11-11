@@ -285,10 +285,23 @@ function surface(ray, scene, object, pointAtTime, normal, depth) {
   if (object.lambert) {
     for (var i = 0; i < scene.lights.length; i++) {
       var lightPoint = scene.lights[0];
-      if (!isLightVisible(pointAtTime, scene, lightPoint)) continue;
-      var contribution = Vector.dotProduct(Vector.unitVector(Vector.subtract(lightPoint,
-        pointAtTime)), normal);
-      if (contribution > 0) lambertAmount += contribution;
+
+      if (object.type === 'sphere') {
+        if (!isLightVisible(pointAtTime, scene, lightPoint)) continue;
+
+        var contribution = Vector.dotProduct(Vector.unitVector(Vector.subtract(lightPoint,
+          pointAtTime)), normal);
+        if (contribution > 0 ) lambertAmount += contribution;
+
+      } else if (object.type === 'plane') {
+        if (isLightVisible(pointAtTime, scene, lightPoint)) continue;
+
+        var contribution = -Vector.dotProduct(Vector.unitVector(Vector.subtract(lightPoint,
+          pointAtTime)), normal);
+
+        if (contribution > 0 ) lambertAmount -= contribution;
+
+      }
     }
   }
   if (object.specular) {
