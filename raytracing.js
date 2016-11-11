@@ -190,27 +190,23 @@ window.onload = function init() {
   }];
 
   render(scene);
-  console.log(planeCount, surfaceCount);
   tick(scene);
 
 };
 
 function tick(scene) {
   var delta = 0.1;
-  console.log('tick')
   theta = theta + delta;
 
   for (var i = 0; i < scene.objects.length; i++) {
     // object = scene.objects[i];
     if (scene.objects[i].type === 'sphere') {
-      console.log(scene.objects[i].point.x);
       scene.objects[i].point.x = r * Math.cos(theta + scene.objects[i].angle);
       scene.objects[i].point.z = r * Math.sin(theta + scene.objects[i].angle) - 1.5;
     }
   }
 
   render(scene);
-  console.log(planeCount, surfaceCount);
   setTimeout(tick, 10, scene);
 }
 
@@ -254,7 +250,7 @@ function render(scene) {
 }
 
 function trace(ray, scene, depth) {
-  if (depth > 2) {
+  if (depth > 3) {
     return;
   }
 
@@ -345,20 +341,21 @@ function planeIntersection(plane, ray) {
   var camera = scene.camera;
   var normal = planeNormal(plane);
 
-  var D = -(normal.x * plane.pointOne.x + normal.y * plane.pointOne.y + normal.z * plane.pointOne.z);
+  var planeD = -(normal.x * plane.pointOne.x + normal.y * plane.pointOne.y + normal.z * plane.pointOne
+    .z);
   // var D = s;
   var startRayPoint = ray.point;
   var rayDirection = ray.vector;
 
   var denom = Vector.dotProduct(normal, rayDirection);
   // if (denom > 0) {
-  //   denom = -denom
+  //   denom = -denom;
   // }
-  if (denom == 0) {
+  if (denom === 0) {
     return;
   } else {
     planeCount++;
-    var t = (-Vector.dotProduct(normal, startRayPoint) - D) / denom
+    var t = -(Vector.dotProduct(normal, startRayPoint) + planeD) / denom;
     var intersect = Vector.add(startRayPoint, Vector.scale(rayDirection, t));
     if (surfaceIntersect(plane, intersect)) {
       return Vector.distanceForm(ray.point, intersect);
@@ -384,8 +381,8 @@ function surfaceIntersect(plane, intersect) {
   }
 
   if ((intersect.x >= bounds[0] && intersect.x <= bounds[1]) || cond1) {
-    if (intersect.y >= bounds[2] && intersect.y <= bounds[3] || cond2) {
-      if (intersect.z >= bounds[4] && intersect.z <= bounds[5] || cond3) {
+    if ((intersect.y >= bounds[2] && intersect.y <= bounds[3]) || cond2) {
+      if ((intersect.z >= bounds[4] && intersect.z <= bounds[5]) || cond3) {
         surfaceCount++;
         return true;
       }
