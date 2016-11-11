@@ -8,9 +8,9 @@ var con;
 var scene;
 var planeCount = 0;
 var surfaceCount = 0;
-var s;
-window.onload = function init()
-{
+var theta;
+var r;
+window.onload = function init() {
   var c = document.getElementById('gl-canvas');
 
   width = 640 * 0.5;
@@ -25,99 +25,194 @@ window.onload = function init()
 
   scene.camera = {
     point: {
-      x: -2, y: -2, z: 10
+      x: -5,
+      y: -5,
+      z: 12
     },
     fieldOfView: 45,
     vector: {
-      x: 0, y: 0, z: 0
+      x: 0,
+      y: 1.5,
+      z: 0
     }
   };
 
   scene.lights = [{
-    x: -30, y: -30, z: 20
+    x: -30,
+    y: -30,
+    z: 20
   }];
-  s = 3;
-
-  scene.objects = [
-    // {
-    // type: 'plane',
-    // reflect: true,
-    // reverse: 1,
-    // pointOne: {
-    //   x: -s, y: -s+1, z: s
-    // },
-    // pointTwo: {
-    //   x: -s, y: -s+1, z: -s
-    // },
-    // pointThree: {
-    //   x: -s, y: s+1, z: -s
-    // },
-    // pointFour: {
-    //   x: -s, y: s+1, z: s
-    // },
-    // color: {
-    //   x: 200, y: 200, z: 200
-    // },
-    //   specular: .5, lambert: 0.7, ambient: 0.4
-    // },
-    {
-      type: 'plane',
-      reflect: true,
-      reverse: -1,
-      pointOne: {
-        x: s, y: -s, z: s
-      },
-      pointTwo: {
-        x: s, y: -s, z: -s
-      },
-      pointThree: {
-        x: s, y: s, z: -s
-      },
-      pointFour: {
-        x: s, y: s, z: s
-      },
-      color: {
-        x: 200, y: 200, z: 200
-      },
-      specular: .5, lambert: 0.7, ambient: 0.4
+  r = 1.5;
+  theta = 0;
+  var numSpheres = 3;
+  var offset = Math.PI / 180 * 360 / numSpheres;
+  scene.objects = [{
+    type: 'plane',
+    pointOne: {
+      x: 3,
+      y: -3,
+      z: 3
     },
-    {
-      type: 'sphere',
-      reflect:false,
-      point: {
-        x: 0, y: 3, z: -2
-      },
-      color: {
-        x: 255, y: 255, z: 0
-      },
-      specular: 0.2, lambert: 0.7, ambient: 0.1, radius: 1
+    pointTwo: {
+      x: 3,
+      y: -3,
+      z: -6
     },
-    {
-      type: 'sphere',
-      reflect:false,
-      point: {
-        x: -1, y: 1.5, z: -3
-      },
-      color: {
-        x: 255, y: 0, z: 0
-      },
-      specular: 0.2, lambert: 0.7, ambient: 0.1, radius: 1
+    pointThree: {
+      x: 3,
+      y: 3,
+      z: -6
     },
-    {
-      type: 'sphere',
-      reflect:true,
-      point: {
-        x: 1, y: 1.5, z: -3
-      },
-      color: {
-        x:0, y:0, z: 255
-      },
-      specular: 1, lambert: 0.7, ambient: 0.1, radius: 1
-    }];
+    pointFour: {
+      x: 3,
+      y: 3,
+      z: 3
+    },
+    color: {
+      x: 200,
+      y: 200,
+      z: 300
+    },
+    specular: .5,
+    lambert: 0.7,
+    ambient: 0.4
+  }, {
+    type: 'plane',
+    pointOne: {
+      x: 3,
+      y: 3,
+      z: 3
+    },
+    pointTwo: {
+      x: 3,
+      y: 3,
+      z: -6
+    },
+    pointThree: {
+      x: -3,
+      y: 3,
+      z: -6
+    },
+    pointFour: {
+      x: -3,
+      y: 3,
+      z: 3
+    },
+    color: {
+      x: 300,
+      y: 200,
+      z: 200
+    },
+    specular: .5,
+    lambert: 0.7,
+    ambient: 0.4
+  }, {
+    type: 'plane',
+    pointOne: {
+      x: -3,
+      y: -3,
+      z: -6
+    },
+    pointTwo: {
+      x: 3,
+      y: -3,
+      z: -6
+    },
+    pointThree: {
+      x: 3,
+      y: 3,
+      z: -6
+    },
+    pointFour: {
+      x: -3,
+      y: 3,
+      z: -6
+    },
+    color: {
+      x: 200,
+      y: 300,
+      z: 200
+    },
+    specular: .5,
+    lambert: 0.7,
+    ambient: 0.4
+  }, {
+    type: 'sphere',
+    point: {
+      x: r * Math.cos(theta),
+      y: 1.5,
+      z: r * Math.sin(theta) - 1.5
+    },
+    color: {
+      x: 255,
+      y: 255,
+      z: 0
+    },
+    specular: 0.2,
+    lambert: 0.7,
+    ambient: 0.1,
+    radius: 1,
+    angle: 0
+  }, {
+    type: 'sphere',
+    point: {
+      x: r * Math.cos(theta + offset),
+      y: 1.5,
+      z: r * Math.sin(theta + offset) - 1.5
+    },
+    color: {
+      x: 255,
+      y: 0,
+      z: 0
+    },
+    specular: 0.2,
+    lambert: 0.7,
+    ambient: 0.1,
+    radius: 1,
+    angle: offset
+  }, {
+    type: 'sphere',
+    point: {
+      x: r * Math.cos(theta - offset),
+      y: 1.5,
+      z: r * Math.sin(theta - offset) - 1.5
+    },
+    color: {
+      x: 0,
+      y: 0,
+      z: 255
+    },
+    specular: 0.2,
+    lambert: 0.7,
+    ambient: 0.1,
+    radius: 1,
+    angle: -offset
+  }];
 
   render(scene);
   console.log(planeCount, surfaceCount);
+  tick(scene);
+
 };
+
+function tick(scene) {
+  var delta = 0.1;
+  console.log('tick')
+  theta = theta + delta;
+
+  for (var i = 0; i < scene.objects.length; i++) {
+    // object = scene.objects[i];
+    if (scene.objects[i].type === 'sphere') {
+      console.log(scene.objects[i].point.x);
+      scene.objects[i].point.x = r * Math.cos(theta + scene.objects[i].angle);
+      scene.objects[i].point.z = r * Math.sin(theta + scene.objects[i].angle) - 1.5;
+    }
+  }
+
+  render(scene);
+  console.log(planeCount, surfaceCount);
+  setTimeout(tick, 10, scene);
+}
 
 function render(scene) {
   var camera = scene.camera;
@@ -159,7 +254,9 @@ function render(scene) {
 }
 
 function trace(ray, scene, depth) {
-  if (depth > 2) return;
+  if (depth > 2) {
+    return;
+  }
 
   var distObject = intersectScene(ray, scene);
   if (distObject[0] === Infinity) {
@@ -193,8 +290,9 @@ function surface(ray, scene, object, pointAtTime, normal, depth) {
     for (var i = 0; i < scene.lights.length; i++) {
       var lightPoint = scene.lights[0];
       if (!isLightVisible(pointAtTime, scene, lightPoint)) continue;
-        var contribution = Vector.dotProduct(Vector.unitVector(Vector.subtract(lightPoint, pointAtTime)), normal);
-        if (contribution > 0) lambertAmount += contribution;
+      var contribution = Vector.dotProduct(Vector.unitVector(Vector.subtract(lightPoint,
+        pointAtTime)), normal);
+      if (contribution > 0) lambertAmount += contribution;
     }
   }
   if (object.specular) {
@@ -209,11 +307,14 @@ function surface(ray, scene, object, pointAtTime, normal, depth) {
   }
   lambertAmount = Math.min(1, lambertAmount);
 
-  return Vector.add3(c, Vector.scale(b, lambertAmount * object.lambert),Vector.scale(b, object.ambient));
+  return Vector.add3(c, Vector.scale(b, lambertAmount * object.lambert), Vector.scale(b, object.ambient));
 }
 
 function isLightVisible(pt, scene, light) {
-  var distObject =  intersectScene({point: pt, vector: Vector.unitVector(Vector.subtract(pt, light))}, scene);
+  var distObject = intersectScene({
+    point: pt,
+    vector: Vector.unitVector(Vector.subtract(pt, light))
+  }, scene);
   return distObject[0] > -0.005;
 }
 
@@ -222,13 +323,13 @@ function intersectScene(ray, scene) {
   var closest = [Infinity, null];
   for (var i = 0; i < scene.objects.length; i++) {
     var object = scene.objects[i];
-    if (object.type === 'sphere'){
+    if (object.type === 'sphere') {
       dist = sphereIntersection(object, ray);
     } else if (object.type === 'plane') {
       dist = planeIntersection(object, ray);
     }
     if (dist !== undefined && dist < closest[0]) {
-        closest = [dist, object];
+      closest = [dist, object];
     }
   }
   return closest;
@@ -244,7 +345,7 @@ function planeIntersection(plane, ray) {
   var camera = scene.camera;
   var normal = planeNormal(plane);
 
-  var D = -(normal.x*plane.pointOne.x + normal.y*plane.pointOne.y +normal.z*plane.pointOne.z);
+  var D = -(normal.x * plane.pointOne.x + normal.y * plane.pointOne.y + normal.z * plane.pointOne.z);
   // var D = s;
   var startRayPoint = ray.point;
   var rayDirection = ray.vector;
@@ -269,14 +370,16 @@ function planeIntersection(plane, ray) {
 
 function surfaceIntersect(plane, intersect) {
   var bounds = getSurfaceBounds(plane);
-  var cond1=false, cond2=false, cond3=false;
-  if (bounds[0]===bounds[1]) {
+  var cond1 = false,
+    cond2 = false,
+    cond3 = false;
+  if (bounds[0] === bounds[1]) {
     cond1 = true;
   }
-  if (bounds[2]===bounds[3]) {
+  if (bounds[2] === bounds[3]) {
     cond2 = true;
   }
-  if (bounds[4]===bounds[5]) {
+  if (bounds[4] === bounds[5]) {
     cond3 = true;
   }
 
